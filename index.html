@@ -40,6 +40,7 @@
         }
         .input-container {
             width: 50%;
+            transform: translateY(-10px);
         }
         .button-container button-group {
             display: flex;
@@ -90,7 +91,7 @@
     </style>
 </head>
 <body>
-    <a href="https://tracker.gg/valorant" target="_blank" style="position: absolute; top: 10px; left: 10px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Tracker</a>
+    <a href="https://tracker.gg/valorant" target="_blank" style="position: absolute; top: 20px; left: 10px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Tracker</a>
     <div class="left-container">
         <h1>Daily Tracker Score Calculator</h1>
         <table class="tier-table">
@@ -206,13 +207,7 @@
             else if (score >= 400) document.getElementById("c-tier").classList.add("highlight");
             else document.getElementById("d-tier").classList.add("highlight");
         }
-
-        function resetData() {
-            document.querySelectorAll('.input-container input').forEach(input => input.value = '');
-            localStorage.removeItem('trackerScores');
-            document.getElementById('output').innerHTML = "";
-        }
     </script>
-    <div style="position: absolute; bottom: 20px; right: 10px; font-size: 14px; color: #555;">@OrcaStratZ on YouTube</div>
+    <div style="position: absolute; bottom: 10px; right: 10px; font-size: 14px; color: #555;">@OrcaStratZ on YouTube</div>
 </body>
 </html>
