@@ -61,7 +61,7 @@
             background-color: #e8eef3;
         }
         button {
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-size: 16px;
             border: none;
             border-radius: 5px;
@@ -75,43 +75,34 @@
             background-color: #0056b3;
         }
         .reset-btn {
-            background-color: #dc3545;
+            background-color: #ff9999;
             color: white;
-            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
         .reset-btn:hover {
-            background-color: #a71d2a;
+            background-color: #e57373;
+        }
+        .grey-btn {
+            background-color: #808080;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .grey-btn:hover {
+            background-color: #6e6e6e;
         }
         .output {
             text-align: center;
             font-size: 18px;
             font-weight: bold;
             margin-top: 10px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                align-items: center;
-                height: auto;
-                overflow: auto;
-            }
-            .input-container, .left-container {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            .button-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .button-container button {
-                width: 90%;
-                margin-bottom: 10px;
-            }
-            table {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -136,9 +127,9 @@
         </table>
         <div class="output" id="output"></div>
         <div class="button-container">
-            <button style="padding: 10px 20px;" onclick="addRow()">Add Row</button>
+            <button class="grey-btn" onclick="addRow()">Add Row</button>
             <button class="reset-btn" onclick="resetData()">Reset</button>
-            <button style="padding: 10px 20px;" onclick="removeRow()">Remove Row</button>
+            <button class="grey-btn" onclick="removeRow()">Remove Row</button>
         </div>
     </div>
 
@@ -148,18 +139,85 @@
             <tbody id="scoreTable">
             </tbody>
         </table>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const tableBody = document.getElementById('scoreTable');
-                for (let i = 1; i <= 8; i++) {
-                    addRow();
-                }
-            });
-        </script>
         <div style="display: flex; justify-content: center; margin-top: 10px;">
             <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
         </div>
     </div>
+
+    <script>
+        function saveData() {
+            const scores = [];
+            document.querySelectorAll('#scoreTable input').forEach(input => {
+                scores.push(input.value);
+            });
+            localStorage.setItem('trackerScores', JSON.stringify(scores));
+            localStorage.setItem('rowCount', document.getElementById('scoreTable').children.length);
+        }
+
+        function loadData() {
+            let savedScores = JSON.parse(localStorage.getItem('trackerScores')) || [];
+            let rowCount = localStorage.getItem('rowCount') || 8;
+            document.getElementById('scoreTable').innerHTML = '';
+            for (let i = 0; i < rowCount; i++) {
+                addRow(savedScores[i] || '');
+            }
+        }
+
+        function addRow(value = '') {
+            const tableBody = document.getElementById('scoreTable');
+            if (tableBody.children.length >= 16) return;
+            const row = document.createElement('tr');
+            const cell1 = document.createElement('td');
+            cell1.textContent = tableBody.children.length + 1;
+            row.appendChild(cell1);
+            const cell2 = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.max = '999';
+            input.value = value;
+            input.placeholder = 'Enter score';
+            input.style.width = '80%';
+            input.addEventListener('input', function() {
+                if (this.value > 999) this.value = 999;
+                if (this.value < 0) this.value = 0;
+                saveData();
+            });
+            cell2.appendChild(input);
+            row.appendChild(cell2);
+            tableBody.appendChild(row);
+            saveData();
+        }
+
+        function removeRow() {
+            const tableBody = document.getElementById('scoreTable');
+            if (tableBody.children.length > 1) {
+                tableBody.removeChild(tableBody.lastChild);
+                saveData();
+            }
+        }
+        document.addEventListener("DOMContentLoaded", loadData);
+            function calculateAverage() {
+            const inputs = document.querySelectorAll('#scoreTable input');
+            let total = 0;
+            let count = 0;
+            inputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                    count++;
+                }
+            });
+            const average = count > 0 ? (total / count).toFixed(2) : 0;
+            document.getElementById('output').innerHTML = `Average Tracker Score: ${average}`;
+        }
+            function resetData() {
+            localStorage.removeItem('trackerScores');
+            localStorage.removeItem('rowCount');
+            document.getElementById('scoreTable').innerHTML = '';
+            loadData();
+        }
+    </script>
     <div style="position: absolute; bottom: 0px; right: 10px; font-size: 14px; color: #555;">@OrcaStratZ on YouTube</div>
 </body>
 </html>
