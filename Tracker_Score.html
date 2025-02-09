@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracker Score Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            flex-direction: row;
+            gap: 40px;
+        }
+        .left-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tier-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tier-table th, .tier-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        .tier-table th {
+            background-color: #e8eef3;
+        }
+        .highlight {
+            background-color: #ffeb3b !important;
+        }
+        .input-container {
+            width: 50%;
+        }
+        .button-container button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #e8eef3;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .calculate-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .calculate-btn:hover {
+            background-color: #0056b3;
+        }
+        .reset-btn {
+            background-color: #dc3545;
+            color: white;
+            margin-top: 10px;
+        }
+        .reset-btn:hover {
+            background-color: #a71d2a;
+        }
+        .output {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-container">
+        <h1>Daily Tracker Score Calculator</h1>
+        <table class="tier-table">
+            <thead>
+                <tr>
+                    <th>Tier</th>
+                    <th>Tracker Score Range</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="s-tier"><td style="color: #1a73e8;">S-Tier</td><td>850+</td></tr>
+                <tr id="a-tier"><td style="color: #50c878;">A-Tier</td><td>700 - 849</td></tr>
+                <tr id="b-tier"><td style="color: #ffcc00;">B-Tier</td><td>550 - 699</td></tr>
+                <tr id="c-tier"><td style="color: #808080;">C-Tier</td><td>400 - 549</td></tr>
+                <tr id="d-tier"><td style="color: #ff6666;">D-Tier</td><td>&lt; 400</td></tr>
+            </tbody>
+        </table>
+        <div class="output" id="output"></div>
+        <div class="button-container">
+            <button style="padding: 10px 20px;" onclick="addRow()">Add Row</button>
+            <button class="reset-btn" onclick="resetData()">Reset</button>
+            <button style="padding: 10px 20px;" onclick="removeRow()">Remove Row</button>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <table>
+            <tbody id="scoreTable">
+            </tbody>
+        </table>
+        <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
+        </div>
+    </div>
+
+    <script>
+        function loadData() {
+            let savedScores = localStorage.getItem('trackerScores');
+            if (savedScores) {
+                savedScores = JSON.parse(savedScores);
+                document.querySelectorAll('.input-container input').forEach((input, index) => {
+                    if (savedScores[index] !== null) {
+                        input.value = savedScores[index];
+                    }
+                });
+            }
+        }
+
+        const tableBody = document.getElementById('scoreTable');
+        function initializeTable() {
+            for (let i = 1; i <= 8; i++) {
+                addRow();
+            }
+        }
+
+        function addRow() {
+            if (tableBody.children.length >= 16) return;
+            const row = document.createElement('tr');
+            const cell1 = document.createElement('td');
+            cell1.textContent = tableBody.children.length + 1;
+            row.appendChild(cell1);
+
+            const cell2 = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = '0';
+            input.placeholder = 'Enter score';
+            input.style.width = '80%';
+            cell2.appendChild(input);
+            row.appendChild(cell2);
+            tableBody.appendChild(row);
+        }
+
+        function removeRow() {
+            if (tableBody.children.length > 1) {
+                tableBody.removeChild(tableBody.lastChild);
+            }
+        }
+
+        initializeTable();
+        loadData();
+
+        function calculateAverage() {
+            const inputs = document.querySelectorAll('.input-container input');
+            let total = 0;
+            let count = 0;
+            let scores = [];
+
+            inputs.forEach(input => {
+                const value = parseFloat(input.value);
+                if (!isNaN(value)) {
+                    total += value;
+                    count++;
+                    scores.push(value);
+                } else {
+                    scores.push(null);
+                }
+            });
+
+            localStorage.setItem('trackerScores', JSON.stringify(scores));
+
+            const average = count > 0 ? (total / count).toFixed(2) : 0;
+            document.getElementById('output').innerHTML = `<p>Average Tracker Score: ${average}</p>`;
+            highlightTier(average);
+        }
+
+        function highlightTier(score) {
+            document.querySelectorAll(".tier-table tr").forEach(row => row.classList.remove("highlight"));
+            if (score >= 850) document.getElementById("s-tier").classList.add("highlight");
+            else if (score >= 700) document.getElementById("a-tier").classList.add("highlight");
+            else if (score >= 550) document.getElementById("b-tier").classList.add("highlight");
+            else if (score >= 400) document.getElementById("c-tier").classList.add("highlight");
+            else document.getElementById("d-tier").classList.add("highlight");
+        }
+
+        function resetData() {
+            document.querySelectorAll('.input-container input').forEach(input => input.value = '');
+            localStorage.removeItem('trackerScores');
+            document.getElementById('output').innerHTML = "";
+        }
+    </script>
+</body>
+</html>
