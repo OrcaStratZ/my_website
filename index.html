@@ -145,6 +145,14 @@
             <tbody id="scoreTable">
             </tbody>
         </table>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tableBody = document.getElementById('scoreTable');
+                for (let i = 1; i <= 8; i++) {
+                    addRow();
+                }
+            });
+        </script>
         <div style="display: flex; justify-content: center; margin-top: 10px;">
             <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
         </div>
