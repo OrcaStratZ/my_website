@@ -19,14 +19,13 @@
       overflow: hidden;
     }
 
-    /* This wrapper will be shifted upwards by 30px */
     .center-content {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100%;
       gap: 40px;
-      transform: translateY(-50px); /* Increase or decrease this value */
+      transform: translateY(-50px);
     }
 
     .left-container {
@@ -122,6 +121,31 @@
       font-weight: bold;
       margin-top: 10px;
     }
+
+    /* ------------
+       MOBILE STYLES
+       ------------ */
+    @media (max-width: 768px) {
+      /* Let the page scroll on small devices, instead of fixed height */
+      body {
+        margin: 10px;
+        padding: 10px;
+        height: auto;
+        overflow: auto;
+      }
+      /* Stack containers vertically and remove the big upward shift */
+      .center-content {
+        flex-direction: column;
+        gap: 20px;
+        transform: none;
+        height: auto;
+      }
+      /* Make containers full width so they fit on phone screens */
+      .input-container,
+      .left-container {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -142,7 +166,7 @@
     >Tracker</a
   >
 
-  <!-- Main wrapper: shifted up by 30px -->
+  <!-- Main wrapper: shifted up by 50px on desktop -->
   <div class="center-content">
     <div class="left-container">
       <h1>Daily Tracker Score Calculator</h1>
