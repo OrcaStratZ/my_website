@@ -19,14 +19,13 @@
       overflow: hidden;
     }
 
-    /* This wrapper will be shifted upwards by 30px */
     .center-content {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100%;
       gap: 40px;
-      transform: translateY(-50px); /* Increase or decrease this value */
+      transform: translateY(-50px);
     }
 
     .left-container {
@@ -125,12 +124,13 @@
   </style>
 </head>
 <body>
-  <!-- Link at the top (absolutely positioned) -->
+  <!-- Add z-index to keep this button on top -->
   <a
     href="https://tracker.gg/valorant"
     target="_blank"
     style="
       position: absolute;
+      z-index: 9999; /* <-- NEW */
       top: 10px;
       left: 10px;
       padding: 10px 20px;
@@ -139,10 +139,8 @@
       text-decoration: none;
       border-radius: 5px;
     "
-    >Tracker</a
-  >
+  >Tracker</a>
 
-  <!-- Main wrapper: shifted up by 30px -->
   <div class="center-content">
     <div class="left-container">
       <h1>Daily Tracker Score Calculator</h1>
@@ -176,7 +174,6 @@
           </tr>
         </tbody>
       </table>
-
       <div class="output" id="output"></div>
 
       <div class="button-container">
