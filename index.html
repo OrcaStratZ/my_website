@@ -1,224 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="image/abstract_orca_profile_picture.png">
-    <title>Tracker Score Calculator by @OrcaStratZ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-            background-color: #f7f9fc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            flex-direction: row;
-            gap: 40px;
-        }
-        .left-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .tier-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .tier-table th, .tier-table td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-        .tier-table th {
-            background-color: #e8eef3;
-        }
-        .highlight {
-            background-color: #ffeb3b !important;
-        }
-        .input-container {
-            width: 50%;
-            transform: translateY(-10px);
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #e8eef3;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .calculate-btn {
-            background-color: #007bff;
-            color: white;
-        }
-        .calculate-btn:hover {
-            background-color: #0056b3;
-        }
-        .reset-btn {
-            background-color: #ff9999;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .reset-btn:hover {
-            background-color: #e57373;
-        }
-        .grey-btn {
-            background-color: #808080;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .grey-btn:hover {
-            background-color: #6e6e6e;
-        }
-        .output {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link
+    rel="icon"
+    type="image/png"
+    href="image/abstract_orca_profile_picture.png"
+  />
+  <title>Tracker Score Calculator by @OrcaStratZ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f7f9fc;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* This wrapper will be shifted upwards by 30px */
+    .center-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      gap: 40px;
+      transform: translateY(-50px); /* Increase or decrease this value */
+    }
+
+    .left-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tier-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tier-table th,
+    .tier-table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    .tier-table th {
+      background-color: #e8eef3;
+    }
+    .highlight {
+      background-color: #ffeb3b !important;
+    }
+
+    .input-container {
+      width: 50%;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #e8eef3;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .calculate-btn {
+      background-color: #007bff;
+      color: white;
+    }
+    .calculate-btn:hover {
+      background-color: #0056b3;
+    }
+    .reset-btn {
+      background-color: #ff9999;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .reset-btn:hover {
+      background-color: #e57373;
+    }
+    .grey-btn {
+      background-color: #808080;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .grey-btn:hover {
+      background-color: #6e6e6e;
+    }
+
+    .output {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <a href="https://tracker.gg/valorant" target="_blank" style="position: absolute; top: 10px; left: 10px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Tracker</a>
+  <!-- Link at the top (absolutely positioned) -->
+  <a
+    href="https://tracker.gg/valorant"
+    target="_blank"
+    style="
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      background-color: lightcoral;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    "
+    >Tracker</a
+  >
+
+  <!-- Main wrapper: shifted up by 30px -->
+  <div class="center-content">
     <div class="left-container">
-        <h1>Daily Tracker Score Calculator</h1>
-        <table class="tier-table">
-            <thead>
-                <tr>
-                    <th>Tier</th>
-                    <th>Tracker Score Range</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="s-tier"><td style="color: #1a73e8;">S-Tier</td><td>850+</td></tr>
-                <tr id="a-tier"><td style="color: #50c878;">A-Tier</td><td>700 - 849</td></tr>
-                <tr id="b-tier"><td style="color: #ffcc00;">B-Tier</td><td>550 - 699</td></tr>
-                <tr id="c-tier"><td style="color: #808080;">C-Tier</td><td>400 - 549</td></tr>
-                <tr id="d-tier"><td style="color: #ff6666;">D-Tier</td><td>&lt; 400</td></tr>
-            </tbody>
-        </table>
-        <div class="output" id="output"></div>
-        <div class="button-container">
-            <button class="grey-btn" onclick="addRow()">Add Row</button>
-            <button class="reset-btn" onclick="resetData()">Reset</button>
-            <button class="grey-btn" onclick="removeRow()">Remove Row</button>
-        </div>
+      <h1>Daily Tracker Score Calculator</h1>
+      <table class="tier-table">
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Tracker Score Range</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="s-tier">
+            <td style="color: #1a73e8;">S-Tier</td>
+            <td>850+</td>
+          </tr>
+          <tr id="a-tier">
+            <td style="color: #50c878;">A-Tier</td>
+            <td>700 - 849</td>
+          </tr>
+          <tr id="b-tier">
+            <td style="color: #ffcc00;">B-Tier</td>
+            <td>550 - 699</td>
+          </tr>
+          <tr id="c-tier">
+            <td style="color: #808080;">C-Tier</td>
+            <td>400 - 549</td>
+          </tr>
+          <tr id="d-tier">
+            <td style="color: #ff6666;">D-Tier</td>
+            <td>&lt; 400</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="output" id="output"></div>
+
+      <div class="button-container">
+        <button class="grey-btn" onclick="addRow()">Add Row</button>
+        <button class="reset-btn" onclick="resetData()">Reset</button>
+        <button class="grey-btn" onclick="removeRow()">Remove Row</button>
+      </div>
     </div>
 
     <div class="input-container">
-        <h2 style="text-align: center;">Enter Match Tracker Scores here.</h2>
-        <table>
-            <tbody id="scoreTable">
-            </tbody>
-        </table>
-        <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
-        </div>
+      <h2 style="text-align: center;">Enter Match Tracker Scores here.</h2>
+      <table>
+        <tbody id="scoreTable"></tbody>
+      </table>
+      <div style="display: flex; justify-content: center; margin-top: 10px;">
+        <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        function saveData() {
-            const scores = [];
-            document.querySelectorAll('#scoreTable input').forEach(input => {
-                scores.push(input.value);
-            });
-            localStorage.setItem('trackerScores', JSON.stringify(scores));
-            localStorage.setItem('rowCount', document.getElementById('scoreTable').children.length);
-        }
+  <script>
+    function saveData() {
+      const scores = [];
+      document.querySelectorAll('#scoreTable input').forEach((input) => {
+        scores.push(input.value);
+      });
+      localStorage.setItem('trackerScores', JSON.stringify(scores));
+      localStorage.setItem('rowCount', document.getElementById('scoreTable').children.length);
+    }
 
-        function loadData() {
-            let savedScores = JSON.parse(localStorage.getItem('trackerScores')) || [];
-            let rowCount = localStorage.getItem('rowCount') || 8;
-            document.getElementById('scoreTable').innerHTML = '';
-            for (let i = 0; i < rowCount; i++) {
-                addRow(savedScores[i] || '');
-            }
-        }
+    function loadData() {
+      let savedScores = JSON.parse(localStorage.getItem('trackerScores')) || [];
+      let rowCount = localStorage.getItem('rowCount') || 8;
+      document.getElementById('scoreTable').innerHTML = '';
+      for (let i = 0; i < rowCount; i++) {
+        addRow(savedScores[i] || '');
+      }
+    }
 
-        function addRow(value = '') {
-            const tableBody = document.getElementById('scoreTable');
-            if (tableBody.children.length >= 16) return;
-            const row = document.createElement('tr');
-            const cell1 = document.createElement('td');
-            cell1.textContent = tableBody.children.length + 1;
-            row.appendChild(cell1);
-            const cell2 = document.createElement('td');
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.min = '0';
-            input.max = '999';
-            input.value = value;
-            input.placeholder = 'Enter score';
-            input.style.width = '80%';
-            input.addEventListener('input', function() {
-                if (this.value > 999) this.value = 999;
-                if (this.value < 0) this.value = 0;
-                saveData();
-            });
-            cell2.appendChild(input);
-            row.appendChild(cell2);
-            tableBody.appendChild(row);
-            saveData();
-        }
+    function addRow(value = '') {
+      const tableBody = document.getElementById('scoreTable');
+      if (tableBody.children.length >= 16) return;
 
-        function removeRow() {
-            const tableBody = document.getElementById('scoreTable');
-            if (tableBody.children.length > 1) {
-                tableBody.removeChild(tableBody.lastChild);
-                saveData();
-            }
+      const row = document.createElement('tr');
+      const cell1 = document.createElement('td');
+      cell1.textContent = tableBody.children.length + 1;
+      row.appendChild(cell1);
+
+      const cell2 = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = '0';
+      input.max = '999';
+      input.value = value;
+      input.placeholder = 'Enter score';
+      input.style.width = '80%';
+      input.addEventListener('input', function () {
+        if (this.value > 999) this.value = 999;
+        if (this.value < 0) this.value = 0;
+        saveData();
+      });
+      cell2.appendChild(input);
+      row.appendChild(cell2);
+      tableBody.appendChild(row);
+      saveData();
+    }
+
+    function removeRow() {
+      const tableBody = document.getElementById('scoreTable');
+      if (tableBody.children.length > 1) {
+        tableBody.removeChild(tableBody.lastChild);
+        saveData();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadData);
+
+    function calculateAverage() {
+      const inputs = document.querySelectorAll('#scoreTable input');
+      let total = 0;
+      let count = 0;
+      inputs.forEach((input) => {
+        const value = parseFloat(input.value);
+        if (!isNaN(value)) {
+          total += value;
+          count++;
         }
-        document.addEventListener("DOMContentLoaded", loadData);
-            function calculateAverage() {
-            const inputs = document.querySelectorAll('#scoreTable input');
-            let total = 0;
-            let count = 0;
-            inputs.forEach(input => {
-                const value = parseFloat(input.value);
-                if (!isNaN(value)) {
-                    total += value;
-                    count++;
-                }
-            });
-            const average = count > 0 ? (total / count).toFixed(2) : 0;
-            document.getElementById('output').innerHTML = `Average Tracker Score: ${average}`;
-        }
-            function resetData() {
-            localStorage.removeItem('trackerScores');
-            localStorage.removeItem('rowCount');
-            document.getElementById('scoreTable').innerHTML = '';
-            loadData();
-        }
-    </script>
-    <div style="position: absolute; bottom: 0px; right: 10px; font-size: 14px; color: #555;">@OrcaStratZ on YouTube</div>
+      });
+      const average = count > 0 ? (total / count).toFixed(2) : 0;
+      document.getElementById('output').innerHTML = `Average Tracker Score: ${average}`;
+    }
+
+    function resetData() {
+      localStorage.removeItem('trackerScores');
+      localStorage.removeItem('rowCount');
+      document.getElementById('scoreTable').innerHTML = '';
+      loadData();
+    }
+  </script>
+
+  <div
+    style="
+      position: absolute;
+      bottom: 0px;
+      right: 10px;
+      font-size: 14px;
+      color: #555;
+    "
+  >
+    @OrcaStratZ on YouTube
+  </div>
 </body>
 </html>
