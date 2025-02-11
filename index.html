@@ -25,7 +25,8 @@
       align-items: center;
       height: 100%;
       gap: 40px;
-      transform: translateY(-50px);
+      /* Removed transform, replaced with negative margin: */
+      margin-top: -50px;
     }
 
     .left-container {
@@ -124,13 +125,13 @@
   </style>
 </head>
 <body>
-  <!-- Add z-index to keep this button on top -->
+  <!-- Add z-index to make sure the button stays on top and clickable -->
   <a
     href="https://tracker.gg/valorant"
     target="_blank"
     style="
       position: absolute;
-      z-index: 9999; /* <-- NEW */
+      z-index: 9999;
       top: 10px;
       left: 10px;
       padding: 10px 20px;
@@ -139,7 +140,9 @@
       text-decoration: none;
       border-radius: 5px;
     "
-  >Tracker</a>
+  >
+    Tracker
+  </a>
 
   <div class="center-content">
     <div class="left-container">
@@ -216,7 +219,6 @@
     function addRow(value = '') {
       const tableBody = document.getElementById('scoreTable');
       if (tableBody.children.length >= 16) return;
-
       const row = document.createElement('tr');
       const cell1 = document.createElement('td');
       cell1.textContent = tableBody.children.length + 1;
