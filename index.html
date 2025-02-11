@@ -19,14 +19,14 @@
       overflow: hidden;
     }
 
+    /* This wrapper will be shifted upwards by 30px */
     .center-content {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100%;
       gap: 40px;
-      /* Removed transform, replaced with negative margin: */
-      margin-top: -50px;
+      transform: translateY(-50px); /* Increase or decrease this value */
     }
 
     .left-container {
@@ -125,13 +125,12 @@
   </style>
 </head>
 <body>
-  <!-- Add z-index to make sure the button stays on top and clickable -->
+  <!-- Link at the top (absolutely positioned) -->
   <a
     href="https://tracker.gg/valorant"
     target="_blank"
     style="
       position: absolute;
-      z-index: 9999;
       top: 10px;
       left: 10px;
       padding: 10px 20px;
@@ -140,10 +139,10 @@
       text-decoration: none;
       border-radius: 5px;
     "
+    >Tracker</a
   >
-    Tracker
-  </a>
 
+  <!-- Main wrapper: shifted up by 30px -->
   <div class="center-content">
     <div class="left-container">
       <h1>Daily Tracker Score Calculator</h1>
@@ -177,6 +176,7 @@
           </tr>
         </tbody>
       </table>
+
       <div class="output" id="output"></div>
 
       <div class="button-container">
@@ -219,6 +219,7 @@
     function addRow(value = '') {
       const tableBody = document.getElementById('scoreTable');
       if (tableBody.children.length >= 16) return;
+
       const row = document.createElement('tr');
       const cell1 = document.createElement('td');
       cell1.textContent = tableBody.children.length + 1;
