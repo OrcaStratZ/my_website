@@ -47,8 +47,10 @@
     .tier-table th {
       background-color: #e8eef3;
     }
+
+    /* Highlight for the last-edited row; persists across page reloads */
     .highlight {
-      background-color: #ffeb3b !important;
+      background-color: #fff9c4 !important; /* Light yellow */
     }
 
     .input-container {
@@ -126,22 +128,20 @@
 <body>
   <!-- Add z-index to keep this button on top -->
   <a
-  href="https://tracker.gg/valorant"
-  target="_blank"
-  style="
-    position: absolute;
-    z-index: 9999;
-    /* Changed from 10px to 15px */
-    top: 10px;
-    left: 10px;
-    padding: 10px 20px;
-    background-color: lightcoral;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-  "
->Tracker</a>
-
+    href="https://tracker.gg/valorant"
+    target="_blank"
+    style="
+      position: absolute;
+      z-index: 9999;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      background-color: lightcoral;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    "
+  >Tracker</a>
 
   <div class="center-content">
     <div class="left-container">
@@ -156,23 +156,23 @@
         <tbody>
           <tr id="s-tier">
             <td style="color: #1a73e8;">S-Tier</td>
-            <td>850+</td>
+            <td>825+</td>
           </tr>
           <tr id="a-tier">
             <td style="color: #50c878;">A-Tier</td>
-            <td>700 - 849</td>
+            <td>650 - 824</td>
           </tr>
           <tr id="b-tier">
             <td style="color: #ffcc00;">B-Tier</td>
-            <td>550 - 699</td>
+            <td>475 - 649</td>
           </tr>
           <tr id="c-tier">
             <td style="color: #808080;">C-Tier</td>
-            <td>400 - 549</td>
+            <td>300 - 474</td>
           </tr>
           <tr id="d-tier">
             <td style="color: #ff6666;">D-Tier</td>
-            <td>&lt; 400</td>
+            <td>&lt; 300</td>
           </tr>
         </tbody>
       </table>
@@ -197,6 +197,26 @@
   </div>
 
   <script>
+    /**
+     * Highlights a specific row, removing highlight from all others.
+     * Also stores the row's index in localStorage so we can restore it on reload.
+     */
+    function highlightRow(row) {
+      // Remove highlight from all existing rows
+      document.querySelectorAll('#scoreTable tr').forEach(r => r.classList.remove('highlight'));
+      
+      // Add highlight to the given row
+      row.classList.add('highlight');
+      
+      // Save the index of this row to localStorage
+      const allRows = Array.from(document.querySelectorAll('#scoreTable tr'));
+      const rowIndex = allRows.indexOf(row); // 0-based
+      localStorage.setItem('highlightedRowIndex', rowIndex);
+    }
+
+    /**
+     * Saves all input values and row count to localStorage.
+     */
     function saveData() {
       const scores = [];
       document.querySelectorAll('#scoreTable input').forEach((input) => {
@@ -206,24 +226,45 @@
       localStorage.setItem('rowCount', document.getElementById('scoreTable').children.length);
     }
 
+    /**
+     * Load saved data from localStorage. Recreate the rows, set their values,
+     * and if we have a highlighted row index, highlight that same row again.
+     */
     function loadData() {
-      let savedScores = JSON.parse(localStorage.getItem('trackerScores')) || [];
-      let rowCount = localStorage.getItem('rowCount') || 8;
-      document.getElementById('scoreTable').innerHTML = '';
+      const savedScores = JSON.parse(localStorage.getItem('trackerScores')) || [];
+      const rowCount = localStorage.getItem('rowCount') || 8;
+      const tableBody = document.getElementById('scoreTable');
+      tableBody.innerHTML = '';
+
+      // Recreate rows from saved data
       for (let i = 0; i < rowCount; i++) {
         addRow(savedScores[i] || '');
+      }
+
+      // Attempt to restore highlight
+      const highlightedIndex = localStorage.getItem('highlightedRowIndex');
+      if (highlightedIndex !== null) {
+        const index = parseInt(highlightedIndex, 10);
+        const rows = document.querySelectorAll('#scoreTable tr');
+        // If the saved index is valid (in range)
+        if (index >= 0 && index < rows.length) {
+          highlightRow(rows[index]);
+        }
       }
     }
 
     function addRow(value = '') {
       const tableBody = document.getElementById('scoreTable');
-      if (tableBody.children.length >= 16) return;
+      if (tableBody.children.length >= 16) return; // Limit to 16 rows
 
       const row = document.createElement('tr');
+
+      // Cell for row index (1-based display)
       const cell1 = document.createElement('td');
       cell1.textContent = tableBody.children.length + 1;
       row.appendChild(cell1);
 
+      // Cell for input
       const cell2 = document.createElement('td');
       const input = document.createElement('input');
       input.type = 'number';
@@ -232,14 +273,24 @@
       input.value = value;
       input.placeholder = 'Enter score';
       input.style.width = '80%';
+
+      // When the user changes this input, highlight the row & save data
       input.addEventListener('input', function () {
+        // Enforce bounds
         if (this.value > 999) this.value = 999;
         if (this.value < 0) this.value = 0;
+
+        // Save the updated scores
         saveData();
+        // Highlight the row we just edited
+        highlightRow(this.closest('tr'));
       });
+
       cell2.appendChild(input);
       row.appendChild(cell2);
       tableBody.appendChild(row);
+
+      // Save data after we add a new row (even if not edited yet)
       saveData();
     }
 
@@ -248,10 +299,14 @@
       if (tableBody.children.length > 1) {
         tableBody.removeChild(tableBody.lastChild);
         saveData();
+        
+        // After removal, we should decide if we want to un-highlight or re-highlight something
+        // For simplicity, do nothing special. If the row that was removed was highlighted,
+        // that highlight won't exist on reload. The user can edit a row to re-highlight.
+        // You could also update localStorage to remove the highlight index, e.g.:
+        // localStorage.removeItem('highlightedRowIndex');
       }
     }
-
-    document.addEventListener('DOMContentLoaded', loadData);
 
     function calculateAverage() {
       const inputs = document.querySelectorAll('#scoreTable input');
@@ -271,9 +326,12 @@
     function resetData() {
       localStorage.removeItem('trackerScores');
       localStorage.removeItem('rowCount');
+      localStorage.removeItem('highlightedRowIndex'); // also remove the stored highlight
       document.getElementById('scoreTable').innerHTML = '';
       loadData();
     }
+
+    document.addEventListener('DOMContentLoaded', loadData);
   </script>
 
   <div
