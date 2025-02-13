@@ -48,7 +48,7 @@
       background-color: #e8eef3;
     }
 
-    /* Highlight for the last-edited row; persists across page reloads */
+    /* Highlight for rows (both right input rows and left tier rows) */
     .highlight {
       background-color: #fff9c4 !important; /* Light yellow */
     }
@@ -93,7 +93,7 @@
       background-color: #0056b3;
     }
     .reset-btn {
-      background-color: #ff9999;
+      background-color: lightcoral;
       color: white;
       padding: 10px 20px;
       font-size: 16px;
@@ -105,7 +105,7 @@
       background-color: #e57373;
     }
     .grey-btn {
-      background-color: #808080;
+      background-color: #b0b0b0;
       color: white;
       padding: 10px 20px;
       font-size: 16px;
@@ -198,20 +198,47 @@
 
   <script>
     /**
-     * Highlights a specific row, removing highlight from all others.
+     * Highlights a specific row, removing highlight from all others (in the right table).
      * Also stores the row's index in localStorage so we can restore it on reload.
      */
     function highlightRow(row) {
-      // Remove highlight from all existing rows
+      // Remove highlight from all existing rows in the right table
       document.querySelectorAll('#scoreTable tr').forEach(r => r.classList.remove('highlight'));
-      
+
       // Add highlight to the given row
       row.classList.add('highlight');
-      
+
       // Save the index of this row to localStorage
       const allRows = Array.from(document.querySelectorAll('#scoreTable tr'));
       const rowIndex = allRows.indexOf(row); // 0-based
       localStorage.setItem('highlightedRowIndex', rowIndex);
+    }
+
+    /**
+     * Highlights the correct tier row on the left based on the average score.
+     */
+    function highlightTierRow(average) {
+      const sTier = document.getElementById('s-tier');
+      const aTier = document.getElementById('a-tier');
+      const bTier = document.getElementById('b-tier');
+      const cTier = document.getElementById('c-tier');
+      const dTier = document.getElementById('d-tier');
+
+      // Remove highlight from all tier rows
+      [sTier, aTier, bTier, cTier, dTier].forEach(row => row.classList.remove('highlight'));
+
+      // Determine which tier row to highlight
+      if (average >= 825) {
+        sTier.classList.add('highlight');
+      } else if (average >= 650) {
+        aTier.classList.add('highlight');
+      } else if (average >= 475) {
+        bTier.classList.add('highlight');
+      } else if (average >= 300) {
+        cTier.classList.add('highlight');
+      } else {
+        dTier.classList.add('highlight');
+      }
     }
 
     /**
@@ -241,7 +268,7 @@
         addRow(savedScores[i] || '');
       }
 
-      // Attempt to restore highlight
+      // Attempt to restore highlight in the right table
       const highlightedIndex = localStorage.getItem('highlightedRowIndex');
       if (highlightedIndex !== null) {
         const index = parseInt(highlightedIndex, 10);
@@ -282,7 +309,7 @@
 
         // Save the updated scores
         saveData();
-        // Highlight the row we just edited
+        // Highlight the row we just edited (on the right side)
         highlightRow(this.closest('tr'));
       });
 
@@ -290,7 +317,7 @@
       row.appendChild(cell2);
       tableBody.appendChild(row);
 
-      // Save data after we add a new row (even if not edited yet)
+      // Save data after we add a new row
       saveData();
     }
 
@@ -299,12 +326,6 @@
       if (tableBody.children.length > 1) {
         tableBody.removeChild(tableBody.lastChild);
         saveData();
-        
-        // After removal, we should decide if we want to un-highlight or re-highlight something
-        // For simplicity, do nothing special. If the row that was removed was highlighted,
-        // that highlight won't exist on reload. The user can edit a row to re-highlight.
-        // You could also update localStorage to remove the highlight index, e.g.:
-        // localStorage.removeItem('highlightedRowIndex');
       }
     }
 
@@ -321,12 +342,15 @@
       });
       const average = count > 0 ? (total / count).toFixed(2) : 0;
       document.getElementById('output').innerHTML = `Average Tracker Score: ${average}`;
+
+      // Highlight the corresponding tier row in the left table
+      highlightTierRow(average);
     }
 
     function resetData() {
       localStorage.removeItem('trackerScores');
       localStorage.removeItem('rowCount');
-      localStorage.removeItem('highlightedRowIndex'); // also remove the stored highlight
+      localStorage.removeItem('highlightedRowIndex'); // also remove the stored right-table highlight
       document.getElementById('scoreTable').innerHTML = '';
       loadData();
     }
