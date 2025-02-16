@@ -3,371 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tracker Score Calculator by @OrcaStratZ</title>
+  <!-- Favicon -->
   <link
     rel="icon"
     type="image/png"
     href="image/abstract_orca_profile_picture.png"
   />
-  <title>Tracker Score Calculator by @OrcaStratZ</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 20px;
-      background-color: #f7f9fc;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .center-content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      gap: 40px;
-      transform: translateY(-50px);
-    }
-
-    .left-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .tier-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .tier-table th,
-    .tier-table td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-    .tier-table th {
-      background-color: #e8eef3;
-    }
-
-    /* Highlight for rows (both right input rows and left tier rows) */
-    .highlight {
-      background-color: #fff9c4 !important; /* Light yellow */
-    }
-
-    .input-container {
-      width: 50%;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 30px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th,
-    td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #e8eef3;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .calculate-btn {
-      background-color: #007bff;
-      color: white;
-    }
-    .calculate-btn:hover {
-      background-color: #0056b3;
-    }
-    .reset-btn {
-      background-color: lightcoral;
-      color: white;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .reset-btn:hover {
-      background-color: #e57373;
-    }
-    .grey-btn {
-      background-color: #b0b0b0;
-      color: white;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .grey-btn:hover {
-      background-color: #6e6e6e;
-    }
-
-    .output {
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-  </style>
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google Font (optional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
 </head>
 <body>
-  <!-- Add z-index to keep this button on top -->
-  <a
-    href="https://tracker.gg/valorant"
-    target="_blank"
-    style="
-      position: absolute;
-      z-index: 9999;
-      top: 10px;
-      left: 10px;
-      padding: 10px 20px;
-      background-color: lightcoral;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    "
-  >Tracker</a>
+  <!-- TOP NAV (ALL BUTTONS ON ONE LINE) -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <!-- Replace '#' with your actual Home URL -->
+      <a href="hier eingeben" class="home-button">Home</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://tracker.gg/valorant" target="_blank" class="red-button">
+        Tracker
+      </a>
+      <a href="https://www.youtube.com/@OrcaStratZ" target="_blank" class="red-button">
+        YouTube
+      </a>
+    </div>
+  </nav>
 
-  <div class="center-content">
-    <div class="left-container">
-      <h1>Daily Tracker Score Calculator</h1>
-      <table class="tier-table">
-        <thead>
-          <tr>
-            <th>Tier</th>
-            <th>Tracker Score Range</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr id="s-tier">
-            <td style="color: #1a73e8;">S-Tier</td>
-            <td>825+</td>
-          </tr>
-          <tr id="a-tier">
-            <td style="color: #50c878;">A-Tier</td>
-            <td>650 - 824</td>
-          </tr>
-          <tr id="b-tier">
-            <td style="color: #ffcc00;">B-Tier</td>
-            <td>475 - 649</td>
-          </tr>
-          <tr id="c-tier">
-            <td style="color: #808080;">C-Tier</td>
-            <td>300 - 474</td>
-          </tr>
-          <tr id="d-tier">
-            <td style="color: #ff6666;">D-Tier</td>
-            <td>&lt; 300</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="output" id="output"></div>
+  <!-- HERO BANNER SECTION -->
+  <section class="hero-section">
+    <div class="hero-background"></div>
+    <div class="hero-overlay"></div>
 
-      <div class="button-container">
-        <button class="grey-btn" onclick="addRow()">Add Row</button>
-        <button class="reset-btn" onclick="resetData()">Reset</button>
-        <button class="grey-btn" onclick="removeRow()">Remove Row</button>
+    <div class="hero-content">
+      <h1 class="hero-title">Tracker Score Calculator</h1>
+      <p class="hero-subtitle">Analyze Your Daily Valorant Performance</p>
+      <!-- Anchor link to scroll down to the tool area -->
+      <a href="#tracker-tool" class="hero-button">Dive Into the Tool</a>
+    </div>
+  </section>
+
+  <!-- MAIN TOOL CONTENT -->
+  <main id="tracker-tool">
+    <div class="center-content">
+      <!-- Left Container: Tier Table & Output -->
+      <div class="left-container">
+        <h2 class="tool-heading">Daily Tracker Score Calculator</h2>
+
+        <!-- Tier Table -->
+        <table class="tier-table">
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Tracker Score Range</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="s-tier">
+              <td class="stier">S-Tier</td>
+              <td>825+</td>
+            </tr>
+            <tr id="a-tier">
+              <td class="atier">A-Tier</td>
+              <td>650 - 824</td>
+            </tr>
+            <tr id="b-tier">
+              <td class="btier">B-Tier</td>
+              <td>475 - 649</td>
+            </tr>
+            <tr id="c-tier">
+              <td class="ctier">C-Tier</td>
+              <td>300 - 474</td>
+            </tr>
+            <tr id="d-tier">
+              <td class="dtier">D-Tier</td>
+              <td>&lt; 300</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Result / Output -->
+        <div class="output" id="output"></div>
+
+        <!-- Buttons: Add Row, Reset, Remove Row -->
+        <div class="button-container">
+          <button class="grey-btn" onclick="addRow()">Add Row</button>
+          <button class="reset-btn" onclick="resetData()">Reset</button>
+          <button class="grey-btn" onclick="removeRow()">Remove Row</button>
+        </div>
+      </div>
+
+      <!-- Right Container: Input Table -->
+      <div class="input-container">
+        <h2 class="tool-heading" style="text-align: center;">Enter Match Tracker Scores</h2>
+        <table>
+          <tbody id="scoreTable"></tbody>
+        </table>
+        <div style="display: flex; justify-content: center; margin-top: 10px;">
+          <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
+        </div>
       </div>
     </div>
+  </main>
 
-    <div class="input-container">
-      <h2 style="text-align: center;">Enter Match Tracker Scores here.</h2>
-      <table>
-        <tbody id="scoreTable"></tbody>
-      </table>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <button class="calculate-btn" onclick="calculateAverage()">Calculate Average</button>
-      </div>
-    </div>
-  </div>
+  <!-- FOOTER NOTE -->
+  <footer class="footer-section">
+    <p>&copy; <span id="currentYear"></span> OrcaStratZ. All rights reserved.</p>
+  </footer>
 
-  <script>
-    /**
-     * Highlights a specific row, removing highlight from all others (in the right table).
-     * Also stores the row's index in localStorage so we can restore it on reload.
-     */
-    function highlightRow(row) {
-      // Remove highlight from all existing rows in the right table
-      document.querySelectorAll('#scoreTable tr').forEach(r => r.classList.remove('highlight'));
-
-      // Add highlight to the given row
-      row.classList.add('highlight');
-
-      // Save the index of this row to localStorage
-      const allRows = Array.from(document.querySelectorAll('#scoreTable tr'));
-      const rowIndex = allRows.indexOf(row); // 0-based
-      localStorage.setItem('highlightedRowIndex', rowIndex);
-    }
-
-    /**
-     * Highlights the correct tier row on the left based on the average score.
-     */
-    function highlightTierRow(average) {
-      const sTier = document.getElementById('s-tier');
-      const aTier = document.getElementById('a-tier');
-      const bTier = document.getElementById('b-tier');
-      const cTier = document.getElementById('c-tier');
-      const dTier = document.getElementById('d-tier');
-
-      // Remove highlight from all tier rows
-      [sTier, aTier, bTier, cTier, dTier].forEach(row => row.classList.remove('highlight'));
-
-      // Determine which tier row to highlight
-      if (average >= 825) {
-        sTier.classList.add('highlight');
-      } else if (average >= 650) {
-        aTier.classList.add('highlight');
-      } else if (average >= 475) {
-        bTier.classList.add('highlight');
-      } else if (average >= 300) {
-        cTier.classList.add('highlight');
-      } else {
-        dTier.classList.add('highlight');
-      }
-    }
-
-    /**
-     * Saves all input values and row count to localStorage.
-     */
-    function saveData() {
-      const scores = [];
-      document.querySelectorAll('#scoreTable input').forEach((input) => {
-        scores.push(input.value);
-      });
-      localStorage.setItem('trackerScores', JSON.stringify(scores));
-      localStorage.setItem('rowCount', document.getElementById('scoreTable').children.length);
-    }
-
-    /**
-     * Load saved data from localStorage. Recreate the rows, set their values,
-     * and if we have a highlighted row index, highlight that same row again.
-     */
-    function loadData() {
-      const savedScores = JSON.parse(localStorage.getItem('trackerScores')) || [];
-      const rowCount = localStorage.getItem('rowCount') || 8;
-      const tableBody = document.getElementById('scoreTable');
-      tableBody.innerHTML = '';
-
-      // Recreate rows from saved data
-      for (let i = 0; i < rowCount; i++) {
-        addRow(savedScores[i] || '');
-      }
-
-      // Attempt to restore highlight in the right table
-      const highlightedIndex = localStorage.getItem('highlightedRowIndex');
-      if (highlightedIndex !== null) {
-        const index = parseInt(highlightedIndex, 10);
-        const rows = document.querySelectorAll('#scoreTable tr');
-        // If the saved index is valid (in range)
-        if (index >= 0 && index < rows.length) {
-          highlightRow(rows[index]);
-        }
-      }
-    }
-
-    function addRow(value = '') {
-      const tableBody = document.getElementById('scoreTable');
-      if (tableBody.children.length >= 16) return; // Limit to 16 rows
-
-      const row = document.createElement('tr');
-
-      // Cell for row index (1-based display)
-      const cell1 = document.createElement('td');
-      cell1.textContent = tableBody.children.length + 1;
-      row.appendChild(cell1);
-
-      // Cell for input
-      const cell2 = document.createElement('td');
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.min = '0';
-      input.max = '999';
-      input.value = value;
-      input.placeholder = 'Enter score';
-      input.style.width = '80%';
-
-      // When the user changes this input, highlight the row & save data
-      input.addEventListener('input', function () {
-        // Enforce bounds
-        if (this.value > 999) this.value = 999;
-        if (this.value < 0) this.value = 0;
-
-        // Save the updated scores
-        saveData();
-        // Highlight the row we just edited (on the right side)
-        highlightRow(this.closest('tr'));
-      });
-
-      cell2.appendChild(input);
-      row.appendChild(cell2);
-      tableBody.appendChild(row);
-
-      // Save data after we add a new row
-      saveData();
-    }
-
-    function removeRow() {
-      const tableBody = document.getElementById('scoreTable');
-      if (tableBody.children.length > 1) {
-        tableBody.removeChild(tableBody.lastChild);
-        saveData();
-      }
-    }
-
-    function calculateAverage() {
-      const inputs = document.querySelectorAll('#scoreTable input');
-      let total = 0;
-      let count = 0;
-      inputs.forEach((input) => {
-        const value = parseFloat(input.value);
-        if (!isNaN(value)) {
-          total += value;
-          count++;
-        }
-      });
-      const average = count > 0 ? (total / count).toFixed(2) : 0;
-      document.getElementById('output').innerHTML = `Average Tracker Score: ${average}`;
-
-      // Highlight the corresponding tier row in the left table
-      highlightTierRow(average);
-    }
-
-    function resetData() {
-      localStorage.removeItem('trackerScores');
-      localStorage.removeItem('rowCount');
-      localStorage.removeItem('highlightedRowIndex'); // also remove the stored right-table highlight
-      document.getElementById('scoreTable').innerHTML = '';
-      loadData();
-    }
-
-    document.addEventListener('DOMContentLoaded', loadData);
-  </script>
-
-  <div
-    style="
-      position: absolute;
-      bottom: 0px;
-      right: 10px;
-      font-size: 14px;
-      color: #555;
-    "
-  >
-    @OrcaStratZ on YouTube
-  </div>
+  <!-- JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
