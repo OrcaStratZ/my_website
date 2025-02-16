@@ -12,16 +12,21 @@
     min-height: 100vh;
   }
   
-  /* ============ TOP NAV ============ */
+  /* ============ FIXED TOP NAV ============ */
   .top-nav {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
+    position: fixed;     /* make the nav fixed so it stays at the top */
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 9999;
+  
     display: flex;
     justify-content: space-between;
     align-items: center;
+  
+    /* Nav background and spacing */
+    background-color: #000;
+    padding: 10px 20px;
   }
   
   .home-button {
@@ -52,7 +57,7 @@
   }
   
   .nav-left {
-    /* you can add styling if needed */
+    /* Additional styling if needed */
   }
   .nav-right {
     display: flex;
@@ -60,10 +65,11 @@
   }
   
   /* ============ HERO SECTION ============ */
-  /* Reduced from 70vh to 50vh for a smaller banner. */
+  /* Add margin-top to push hero below the fixed nav */
   .hero-section {
     position: relative;
-    min-height: 50vh;
+    min-height: 50vh;      /* smaller hero banner height */
+    margin-top: 60px;      /* ensures nav doesn't overlap hero on mobile */
     display: flex;
     align-items: center;
     justify-content: center;
